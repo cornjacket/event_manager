@@ -1,0 +1,37 @@
+require 'csv'
+require 'sunlight/congress'
+
+Sunlight::Congress.api_key = "63e303664fdd441b937dc66b24ae0c32"
+
+def clean_zipcode(zipcode)
+  zipcode.to_s.rjust(5,"0")[0..4]
+end	
+
+puts "EventManager initialized."
+
+contents = CSV.open "event_attendees.csv", headers: true, header_converters: :symbol
+contents.each do |row|
+  name = row[:first_name]
+
+  zipcode = clean_zipcode(row[:zipcode])
+
+  legislators = Sunlight::Congress::Legislator.by_zipcode(zipcode)
+
+  legislator_names = legislators.collect do |legislator|
+  	"#{legislator.first_name} #{legislator.last_name}"
+  end
+  legislators_string = legislator_names.join(', ')
+
+  puts "#{name} #{zipcode} #{legislators_string}"
+
+end
+
+=begin
+lines = File.readlines "event_attendees.csv"
+lines.each_with_index do |line, index|
+  next if index == 0
+  columns = line.split(",")
+  name = columns[2]
+  puts name
+end
+=end
