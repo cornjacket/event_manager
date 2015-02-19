@@ -64,5 +64,6 @@ end
 puts "\nHour/Count Histogram"
 $hour_histogram.sort.each { |hour, count| puts "#{hour} o'clock = #{count}"}
 
+# Display day histogram
 puts "\nDay/Count Histogram"
 $day_histogram.sort.each { |day, count| puts "#{Date::DAYNAMES[day]} = #{count}"}
